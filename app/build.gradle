@@ -31,7 +31,8 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"  
+        versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -53,17 +54,20 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin
-    // Core with Ktx
-    implementation("androidx.core:core-ktx:1.5.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$version_kotlin")
+
+    // Core with Ktx
+    implementation("androidx.core:core-ktx:$version_core")
+
 
     // Constraint Layout
     implementation("androidx.constraintlayout:constraintlayout:$version_constraint_layout")
 
-    // ViewModel and LiveData
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycle")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$version_lifecycle")
 
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$version_lifecycle")
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$version_lifecycle")
     // Lifecycles only (without ViewModel or LiveData)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$version_lifecycle")
 
@@ -71,14 +75,23 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$version_lifecycle")
 
     // Annotation processor
+    // kapt("androidx.lifecycle:lifecycle-compiler:$lifecycle_version")
     // alternately - if using Java8, use the following instead of lifecycle-compiler
     implementation("androidx.lifecycle:lifecycle-common-java8:$version_lifecycle")
 
+    // optional - helpers for implementing LifecycleOwner in a Service
+    implementation("androidx.lifecycle:lifecycle-service:$version_lifecycle")
+
+    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
+    implementation("androidx.lifecycle:lifecycle-process:$version_lifecycle")
+    // optional - ReactiveStreams support for LiveData
+    implementation("androidx.lifecycle:lifecycle-reactivestreams-ktx:$version_lifecycle")
+
+
+
+
     // Navigation
 
-    // Java language implementation
-    implementation("androidx.navigation:navigation-fragment:$version_navigation")
-    implementation("androidx.navigation:navigation-ui:$version_navigation")
 
     // Kotlin  language implementation
     implementation("androidx.navigation:navigation-fragment-ktx:$version_navigation")
@@ -86,9 +99,6 @@ dependencies {
 
     // Feature module Support
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$version_navigation")
-
-    // Testing Navigation
-    androidTestImplementation("androidx.navigation:navigation-testing:$version_navigation")
 
 
     // Moshi
@@ -103,19 +113,12 @@ dependencies {
     // Retrofit with Moshi Converter
     implementation "com.squareup.retrofit2:converter-moshi:$version_retrofit"
 
-    // Coroutines - Deprecated - No more required
-    // implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_kotlin_coroutines"
-    // implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version_kotlin_coroutines"
-
-    // Retrofit Coroutines Support - Deprecated - No more required
-    // implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$version_glide"
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
 
     // RecyclerView
     implementation "androidx.recyclerview:recyclerview:$version_recyclerview"
 
-
+    implementation 'com.android.support:multidex:1.0.3'
 }
