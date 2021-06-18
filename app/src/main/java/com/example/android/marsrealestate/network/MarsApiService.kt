@@ -17,4 +17,9 @@
 
 package com.example.android.marsrealestate.network
 
+import retrofit2.Retrofit
+
 private const val BASE_URL = "https://mars.udacity.com/"
+
+private var retrofit = Retrofit.Builder()
+    .addConverterFactory(ScalarsC)
