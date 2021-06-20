@@ -17,6 +17,8 @@
 
 package com.example.android.marsrealestate.overview
 
+import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -57,14 +59,28 @@ class OverviewViewModel : ViewModel() {
     private fun getMarsRealEstateProperties() {
 
         coroutineScope.launch {
-
-            var getPropertiesDeferred = MarsApi.retrofitService.getProperties()
-            try {
-                var listResult = getPropertiesDeferred.await()
-                _response.value = "Success:  ${listResult.size} Mars properties retrieved."
-            } catch (t: Throwable){
-                _response.value = "Failure: " + t.message
+            val result: String = withContext(Dispatchers.IO) {
+                try {
+//                    Log.i(
+//                        "OverviewViewModel",
+//                        "Success: Is Main Thread ${
+//                            Thread.currentThread().equals(Looper.getMainLooper().getThread())
+//                        }"
+//                    )
+                    val getProperties = MarsApi.retrofitService.getProperties()
+                    return@withContext "${getProperties.code()} , Success:  " +
+                            "${getProperties.body()?.size} Mars properties retrieved."
+                } catch (t: Throwable) {
+//                    Log.i(
+//                        "OverviewViewModel",
+//                        "Failure: Is Main Thread ${
+//                            Thread.currentThread().equals(Looper.getMainLooper().getThread())
+//                        }"
+//                    )
+                    return@withContext "Failure: " + t.message
+                }
             }
+            _response.value = result
         }
     }
 
